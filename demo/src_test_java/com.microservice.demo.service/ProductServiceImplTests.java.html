@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>ProductServiceImplTests.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">java (07-Nov-2024 6:16:48 pm)</a> &gt; <a href="../../index.html" class="el_group">demo</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">com.microservice.demo.service</a> &gt; <span class="el_source">ProductServiceImplTests.java</span></div><h1>ProductServiceImplTests.java</h1><pre class="source lang-java linenums">package com.microservice.demo.service;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.microservice.demo.dto.ProductRequestDTO;
+import com.microservice.demo.dto.ProductResponseDTO;
+import com.microservice.demo.entity.Product;
+import com.microservice.demo.repository.ProductRepository;
+
+@ExtendWith(MockitoExtension.class)
+<span class="fc" id="L26">public class ProductServiceImplTests {</span>
+
+	@InjectMocks
+	private ProductServiceImpl productService;
+
+	@Mock
+	private ProductRepository productRepository;
+
+	@Test
+	@DisplayName(&quot;find all products&quot;)
+	public void findAllProductsTest() {
+<span class="fc" id="L37">		Product dress = Product.builder().name(&quot;dress&quot;).description(&quot;formal dress for women&quot;).price(100).build();</span>
+<span class="fc" id="L38">		Product pants = Product.builder().name(&quot;pants&quot;).description(&quot;formal pants for women&quot;).price(200).build();</span>
+<span class="fc" id="L39">		List&lt;Product&gt; products = List.of(dress, pants);</span>
+
+<span class="fc" id="L41">		when(productRepository.findAll()).thenReturn(products);</span>
+
+<span class="fc" id="L43">		List&lt;ProductResponseDTO&gt; productResponse = productService.findAllProducts();</span>
+
+<span class="fc" id="L45">		verify(productRepository, times(1)).findAll();</span>
+
+<span class="fc" id="L47">		assertNotNull(productResponse);</span>
+<span class="fc" id="L48">		assertEquals(productResponse.size(), products.size());</span>
+<span class="fc" id="L49">		assertEquals(productResponse.get(0).getName(), dress.getName());</span>
+<span class="fc" id="L50">		assertEquals(productResponse.get(0).getDescription(), dress.getDescription());</span>
+<span class="fc" id="L51">		assertEquals(productResponse.get(0).getPrice(), dress.getPrice());</span>
+
+<span class="fc" id="L53">	}</span>
+
+	@Test
+	@DisplayName(&quot;create product&quot;)
+	public void saveProductTest() {
+
+		//Mock
+<span class="fc" id="L60">		Product dress = Product.builder().id(1L).name(&quot;dress&quot;).description(&quot;formal dress for women&quot;).price(100).build();</span>
+<span class="fc" id="L61">		when(productRepository.save(any(Product.class))).thenReturn(dress);</span>
+
+		// Actual service call
+<span class="fc" id="L64">		ProductRequestDTO requestDTO = ProductRequestDTO.builder()</span>
+<span class="fc" id="L65">				.name(dress.getName())</span>
+<span class="fc" id="L66">				.description(dress.getDescription())</span>
+<span class="fc" id="L67">				.price(dress.getPrice())</span>
+<span class="fc" id="L68">				.build();</span>
+<span class="fc" id="L69">		ProductResponseDTO savedProductResponse = productService.saveProduct(requestDTO);</span>
+		
+		// Validate data
+<span class="fc" id="L72">		verify(productRepository, times(1)).save(any(Product.class));</span>
+		
+<span class="fc" id="L74">		assertNotNull(savedProductResponse);</span>
+<span class="fc" id="L75">		assertEquals(savedProductResponse.getId(), dress.getId());</span>
+<span class="fc" id="L76">		assertEquals(savedProductResponse.getName(), requestDTO.getName());</span>
+<span class="fc" id="L77">		assertEquals(savedProductResponse.getDescription(), requestDTO.getDescription());</span>
+<span class="fc" id="L78">		assertEquals(savedProductResponse.getPrice(), requestDTO.getPrice());</span>
+<span class="fc" id="L79">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span>java (07-Nov-2024 6:16:48 pm)</div></body></html>
