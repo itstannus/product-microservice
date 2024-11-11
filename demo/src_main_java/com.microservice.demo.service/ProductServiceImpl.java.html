@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>ProductServiceImpl.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">java (07-Nov-2024 6:16:48 pm)</a> &gt; <a href="../../index.html" class="el_group">demo</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">com.microservice.demo.service</a> &gt; <span class="el_source">ProductServiceImpl.java</span></div><h1>ProductServiceImpl.java</h1><pre class="source lang-java linenums">package com.microservice.demo.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.microservice.demo.dto.ProductRequestDTO;
+import com.microservice.demo.dto.ProductResponseDTO;
+import com.microservice.demo.entity.Product;
+import com.microservice.demo.repository.ProductRepository;
+
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+@Service
+public class ProductServiceImpl implements ProductService {
+	
+	private final ProductRepository productRepository;
+	
+	public List&lt;ProductResponseDTO&gt; findAllProducts(){
+<span class="fc" id="L22">		List&lt;Product&gt; products =  productRepository.findAll();</span>
+		
+		//TODO : use mapstruct from product to productresponsedto
+		//TODO : send exception if list is empty
+<span class="fc" id="L26">		List&lt;ProductResponseDTO&gt; productDtos = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">		for(Product product : products) {</span>
+<span class="fc" id="L28">			ProductResponseDTO productDTO = new ProductResponseDTO();</span>
+<span class="fc" id="L29">			productDTO.setName(product.getName());</span>
+<span class="fc" id="L30">			productDTO.setDescription(product.getDescription());</span>
+<span class="fc" id="L31">			productDTO.setPrice(product.getPrice());</span>
+<span class="fc" id="L32">			productDtos.add(productDTO);</span>
+		}
+		
+<span class="fc" id="L35">		return productDtos;</span>
+	}
+
+	@Override
+	public ProductResponseDTO saveProduct(ProductRequestDTO productRequestDTO) {
+		//TODO mapstruct to convert from productrequestdto to product
+<span class="fc" id="L41">		Product product=Product.builder()</span>
+<span class="fc" id="L42">				.name(productRequestDTO.getName())</span>
+<span class="fc" id="L43">				.description(productRequestDTO.getDescription())</span>
+<span class="fc" id="L44">				.price(productRequestDTO.getPrice())</span>
+<span class="fc" id="L45">				.build();</span>
+		
+<span class="fc" id="L47">		Product savedProduct = productRepository.save(product);</span>
+		
+		//TODO mapstruct to convert from product to productresponsedto
+<span class="fc" id="L50">		ProductResponseDTO productResponseDTO = new ProductResponseDTO();</span>
+<span class="fc" id="L51">		productResponseDTO.setId(savedProduct.getId());</span>
+<span class="fc" id="L52">		productResponseDTO.setName(savedProduct.getName());</span>
+<span class="fc" id="L53">		productResponseDTO.setDescription(savedProduct.getDescription());</span>
+<span class="fc" id="L54">		productResponseDTO.setPrice(savedProduct.getPrice());</span>
+		
+		
+<span class="fc" id="L57">		return productResponseDTO;</span>
+	}
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span>java (07-Nov-2024 6:16:48 pm)</div></body></html>
